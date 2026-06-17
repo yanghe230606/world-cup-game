@@ -2319,111 +2319,206 @@ button {
 
   /* Team screen */
   .team-shell {
-    height: calc(100svh - 16px);
-    gap: 6px;
+    height: calc(100svh - 12px);
+    gap: 4px;
   }
 
   .team-hero h2 {
-    font-size: clamp(20px, 4vw, 34px);
-    margin-top: 4px;
+    font-size: clamp(18px, 3.5vw, 28px);
+    margin-top: 2px;
   }
 
   .team-hero .mega-button {
-    min-height: 36px;
-    padding: 0 14px;
-    font-size: 14px;
+    min-height: 32px;
+    padding: 0 10px;
+    font-size: 13px;
   }
 
   .team-grid {
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 4px;
+    gap: 3px;
   }
 
   .team-card {
-    grid-template-columns: 24px minmax(0, 1fr);
-    min-height: 34px;
-    padding: 4px 6px;
-    gap: 6px;
+    grid-template-columns: 22px minmax(0, 1fr);
+    min-height: 30px;
+    padding: 3px 5px;
+    gap: 4px;
   }
 
   .team-card span:last-child {
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .team-card .flag-img {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
   }
 
   .team-layout {
-    grid-template-columns: minmax(0, 1fr) 240px;
+    grid-template-columns: minmax(0, 1fr) 260px;
+  }
+
+  .selected-card {
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 8px;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+  }
+
+  .selected-card .flag-img.large {
+    width: 42px;
+    height: 42px;
   }
 
   .selected-card strong {
-    font-size: 20px;
+    font-size: 18px;
+  }
+
+  .selected-card span {
+    font-size: 10px;
+  }
+
+  .player-art-card {
+    gap: 4px;
+    min-height: 0;
+    flex: 1;
   }
 
   /* Result screen */
+  .result-screen {
+    padding: 8px;
+  }
+
+  .result-shell {
+    min-height: calc(100svh - 16px);
+    gap: 4px;
+  }
+
   .result-head {
-    min-height: calc(100svh - 20px);
-    padding: 12px;
+    min-height: calc(100svh - 16px);
+    padding: 8px 12px;
+    overflow: hidden;
   }
 
   .result-banner {
-    top: -60px;
-    width: 60vw;
+    top: -50px;
+    width: 55vw;
   }
 
   .result-banner-copy {
-    min-height: 100px;
-    padding-top: 40px;
-    transform: translateY(-24px);
+    min-height: 80px;
+    padding-top: 30px;
+    transform: translateY(-16px);
   }
 
   .result-head h2 {
-    font-size: clamp(28px, 5vw, 48px);
+    font-size: clamp(26px, 4.5vw, 42px);
+  }
+
+  .result-thanks {
+    font-size: clamp(12px, 2vw, 18px);
+    transform: translateY(-18px) perspective(620px) rotateX(-7deg) scaleX(0.96);
   }
 
   .result-stats {
-    margin-top: 4px;
-    gap: 8px;
-    transform: translateY(-36px);
+    margin-top: 2px;
+    gap: 6px;
+    transform: translateY(-22px);
   }
 
   .result-stats strong {
-    font-size: clamp(36px, 6vw, 56px);
+    font-size: clamp(34px, 5.5vw, 52px);
   }
 
   .result-stats span {
-    font-size: clamp(14px, 2vw, 22px);
+    font-size: clamp(13px, 2vw, 20px);
   }
 
   .result-stats div:not(.result-stat-divider) {
-    min-width: 80px;
+    min-width: 70px;
   }
 
   .result-stat-divider {
-    height: 40px;
+    height: 36px;
   }
 
   .result-actions {
     bottom: 4px;
-    gap: 6px;
-    width: min(600px, 90vw);
+    gap: 5px;
+    width: min(520px, 92vw);
   }
 
   .result-button {
-    min-height: 36px;
+    min-height: 34px;
     font-size: 12px;
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.24), 0 6px 10px rgba(0, 0, 0, 0.28);
   }
 
   .result-celebrator {
-    width: 100px;
-    bottom: 50px;
-    left: -10px;
+    width: 86px;
+    bottom: 48px;
+    left: -8px;
   }
 
-  .result-shell {
-    min-height: calc(100svh - 12px);
+  /* Result leaderboard */
+  .result-shell.show-board {
+    height: calc(100svh - 16px);
+  }
+
+  .result-board {
+    grid-template-rows: auto auto 140px minmax(0, 1fr);
+    gap: 6px;
+    padding: 10px;
+  }
+
+  .podium-list {
+    height: 140px;
+  }
+
+  .podium-card,
+  .podium-card.first,
+  .podium-card.second,
+  .podium-card.third {
+    width: 22%;
+    padding: 5px 4px 6px;
+  }
+
+  .podium-card strong {
+    font-size: 11px;
+  }
+
+  .podium-card em {
+    font-size: 16px;
+  }
+
+  .podium-flag {
+    width: 24px;
+    height: 24px;
+  }
+
+  .support-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .leaderboard-item {
+    min-height: 36px;
+    padding: 4px 6px;
+    gap: 4px;
+  }
+
+  .rank {
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+  }
+
+  .leader-team strong {
+    font-size: 12px;
+  }
+
+  .score {
+    font-size: 16px;
   }
 }
