@@ -2134,3 +2134,296 @@ button {
     font-size: 15px;
   }
 }
+
+/* Landscape / short viewport */
+@media (max-height: 500px) {
+  .hud-score {
+    min-height: 40px;
+    padding: 4px 10px;
+    gap: 8px;
+    top: 8px;
+    left: 8px;
+  }
+
+  .hud strong {
+    font-size: 20px;
+  }
+
+  .hud-label {
+    font-size: 10px;
+  }
+
+  .team-pill {
+    min-width: 90px;
+  }
+
+  .leaderboard {
+    display: none;
+  }
+
+  .goal-scene {
+    top: 46%;
+    width: 94vw;
+    height: 250px;
+  }
+
+  .goal-frame {
+    width: 88vw;
+    height: 90px;
+  }
+
+  .is-walkout .goal-frame,
+  .is-stadiumIntro .goal-frame,
+  .is-penalty .goal-frame {
+    top: 20px;
+    width: min(520px, 74vw);
+    height: 100px;
+  }
+
+  .striker-wrap {
+    width: 120px;
+    height: 150px;
+  }
+
+  .striker {
+    width: 125px;
+    height: 160px;
+    left: -4px;
+  }
+
+  .striker-frame.is-kick-frame {
+    transform: translate(-2px, 8px) scale(1.1);
+  }
+
+  .ball {
+    width: 38px;
+    height: 38px;
+    left: 80px;
+    bottom: 22px;
+  }
+
+  .keeper {
+    width: 32px;
+    height: 48px;
+  }
+
+  .aim-reticle {
+    width: 22px;
+    height: 22px;
+  }
+
+  .aim-reticle::before {
+    width: 2px;
+    height: 28px;
+    top: -4px;
+  }
+
+  .aim-reticle::after {
+    width: 28px;
+    height: 2px;
+    left: -4px;
+  }
+
+  .wall-line {
+    top: 28%;
+    height: 70px;
+  }
+
+  .wall-player {
+    width: 40px;
+    height: 58px;
+  }
+
+  .control-dock {
+    bottom: 4px;
+    padding: 5px 8px;
+    gap: 6px;
+    width: min(320px, calc(100vw - 16px));
+  }
+
+  .game-button {
+    min-height: 38px;
+    font-size: 14px;
+  }
+
+  .aim-status strong {
+    font-size: 17px;
+  }
+
+  .result-burst {
+    top: 100px;
+    font-size: clamp(28px, 5vw, 48px);
+    min-width: 180px;
+  }
+
+  .danmaku-layer {
+    height: 80px;
+    inset: 42px 0 auto 0;
+  }
+
+  .danmaku {
+    padding: 4px 10px;
+    font-size: 13px;
+  }
+
+  .gesture-coach {
+    display: none !important;
+  }
+
+  /* Start screen */
+  .start-screen {
+    padding: 10px 14px;
+  }
+
+  .start-year {
+    left: 2%;
+    top: 5%;
+    font-size: 16vh;
+  }
+
+  .start-content {
+    width: 55vw;
+    transform: translateY(-1vh);
+  }
+
+  .start-screen h1 {
+    font-size: clamp(24px, 6vw, 42px);
+    gap: 2px;
+  }
+
+  .start-points {
+    gap: 4px;
+    margin: 10px 0;
+  }
+
+  .start-points li {
+    font-size: clamp(12px, 3vw, 16px);
+  }
+
+  .start-points li img {
+    width: clamp(20px, 4vw, 28px);
+    height: clamp(20px, 4vw, 28px);
+  }
+
+  .start-button-art {
+    width: min(280px, 60vw);
+    font-size: clamp(14px, 3.5vw, 20px);
+    margin: -4px 0 0 -4px;
+  }
+
+  .start-player {
+    right: -10vw;
+    bottom: 6vh;
+    width: min(55vw, 450px);
+  }
+
+  /* Team screen */
+  .team-shell {
+    height: calc(100svh - 16px);
+    gap: 6px;
+  }
+
+  .team-hero h2 {
+    font-size: clamp(20px, 4vw, 34px);
+    margin-top: 4px;
+  }
+
+  .team-hero .mega-button {
+    min-height: 36px;
+    padding: 0 14px;
+    font-size: 14px;
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 4px;
+  }
+
+  .team-card {
+    grid-template-columns: 24px minmax(0, 1fr);
+    min-height: 34px;
+    padding: 4px 6px;
+    gap: 6px;
+  }
+
+  .team-card span:last-child {
+    font-size: 11px;
+  }
+
+  .team-card .flag-img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .team-layout {
+    grid-template-columns: minmax(0, 1fr) 240px;
+  }
+
+  .selected-card strong {
+    font-size: 20px;
+  }
+
+  /* Result screen */
+  .result-head {
+    min-height: calc(100svh - 20px);
+    padding: 12px;
+  }
+
+  .result-banner {
+    top: -60px;
+    width: 60vw;
+  }
+
+  .result-banner-copy {
+    min-height: 100px;
+    padding-top: 40px;
+    transform: translateY(-24px);
+  }
+
+  .result-head h2 {
+    font-size: clamp(28px, 5vw, 48px);
+  }
+
+  .result-stats {
+    margin-top: 4px;
+    gap: 8px;
+    transform: translateY(-36px);
+  }
+
+  .result-stats strong {
+    font-size: clamp(36px, 6vw, 56px);
+  }
+
+  .result-stats span {
+    font-size: clamp(14px, 2vw, 22px);
+  }
+
+  .result-stats div:not(.result-stat-divider) {
+    min-width: 80px;
+  }
+
+  .result-stat-divider {
+    height: 40px;
+  }
+
+  .result-actions {
+    bottom: 4px;
+    gap: 6px;
+    width: min(600px, 90vw);
+  }
+
+  .result-button {
+    min-height: 36px;
+    font-size: 12px;
+  }
+
+  .result-celebrator {
+    width: 100px;
+    bottom: 50px;
+    left: -10px;
+  }
+
+  .result-shell {
+    min-height: calc(100svh - 12px);
+  }
+}
