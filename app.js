@@ -211,6 +211,7 @@ let currentAimZoneId = "centerTop";
 let flashbulbTimer = null;
 let shotTimerId = null;
 let shotTimeLeft = 30;
+const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 
 const root = document.documentElement;
 const gameStage = document.querySelector("#gameStage");
@@ -1036,6 +1037,7 @@ function trackMotion() {
 }
 
 async function enableCamera() {
+  if (isTouchDevice) return;
   if (!navigator.mediaDevices?.getUserMedia) {
     gestureStatus.textContent = "This browser does not support the camera API.";
     return;
@@ -1113,8 +1115,16 @@ goalScene.addEventListener("pointermove", (event) => {
   updateAim((event.clientX - rect.left) / rect.width, (event.clientY - rect.top) / rect.height);
 });
 
-goalScene.addEventListener("click", () => {
-  if (gameState === "penalty") shoot();
+goalScene.addEventListener("click", (event) => {
+  if (gameState !== "penalty" || shooting) return;
+  if (isTouchDevice) {
+    const rect = goalScene.getBoundingClientRect();
+    updateAim(
+      (event.clientX - rect.left) / rect.width,
+      (event.clientY - rect.top) / rect.height,
+    );
+  }
+  shoot();
 });
 
 targetZoneButtons.forEach((button) => {
