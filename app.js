@@ -211,6 +211,10 @@ let currentAimZoneId = "centerTop";
 let flashbulbTimer = null;
 let shotTimerId = null;
 let shotTimeLeft = 30;
+let fistFrameCount = 0;
+let lastGestureShotAt = 0;
+let walkoutTimers = [];
+let bgmFadeFrameId = null;
 const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 
 const root = document.documentElement;
@@ -232,6 +236,7 @@ const activeSupport = document.querySelector("#activeSupport");
 const streak = document.querySelector("#streak");
 const shotTimer = document.querySelector("#shotTimer");
 const shotTimerValue = document.querySelector("#shotTimerValue");
+const walkoutCountdown = document.querySelector("#walkoutCountdown");
 const selectedFlag = document.querySelector("#selectedFlag");
 const selectedTeamName = document.querySelector("#selectedTeamName");
 const walkoutFlag = document.querySelector("#walkoutFlag");
@@ -242,6 +247,7 @@ const aimReticle = document.querySelector("#aimReticle");
 const aimCurvePath = document.querySelector("#aimCurvePath");
 const wallLine = document.querySelector("#wallLine");
 const goalScene = document.querySelector(".goal-scene");
+const goalFrame = document.querySelector(".goal-frame");
 const targetZoneButtons = document.querySelectorAll(".target-zone");
 const keeper = document.querySelector("#keeper");
 const keeperFrame = document.querySelector("#keeperFrame");
@@ -301,9 +307,100 @@ const resultTextArc = {
   summaryCurve: 17,
   summaryRotation: 11,
 };
+const shotResultMessages = {
+  BLOCKED: "Blocked by the wall!",
+  MISS: "So close, just wide!",
+  SAVED: "What a save!",
+  GOAL: "It's in!! Goal!",
+};
+const bgm = new Audio("./music/bgm/Ukulele Cardio.mp3");
+const goalSfx = new Audio("./music/Firefly_audio_stadium_crowd_cheering_loudly_after_a_goal,_soccer_variation2.wav");
+const countdownSfx = new Audio("./music/mixkit-race-countdown-1953.wav");
+const BGM_VOLUME = 0.42;
+const GOAL_SFX_VOLUME = 0.86;
+const COUNTDOWN_SFX_VOLUME = 0.48;
 const SHOT_TIME_LIMIT = 30;
+const GESTURE_HINT_STORAGE_KEY = "worldCupGestureHintSettings";
+const gestureHintVars = [
+  "--gesture-coach-left",
+  "--gesture-coach-top",
+  "--gesture-arrow-left",
+  "--gesture-arrow-top",
+  "--gesture-arrow-rotate",
+];
 const strikerIdleFrame = strikerFrame.src;
 const strikerKickFrame = "./image/figure/%E5%88%9D%E5%A7%8B%E4%BA%BA%E7%89%A9/%E8%A7%A6%E7%90%83.png";
+
+bgm.loop = true;
+bgm.volume = 0;
+goalSfx.volume = GOAL_SFX_VOLUME;
+countdownSfx.volume = COUNTDOWN_SFX_VOLUME;
+
+function fadeAudio(audio, targetVolume, duration = 900, onComplete) {
+  if (audio === bgm && bgmFadeFrameId) {
+    cancelAnimationFrame(bgmFadeFrameId);
+    bgmFadeFrameId = null;
+  }
+
+  const startVolume = audio.volume;
+  const startedAt = performance.now();
+
+  function step(now) {
+    const progress = clamp((now - startedAt) / duration, 0, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    audio.volume = startVolume + (targetVolume - startVolume) * eased;
+
+    if (progress < 1) {
+      const frameId = requestAnimationFrame(step);
+      if (audio === bgm) bgmFadeFrameId = frameId;
+      return;
+    }
+
+    if (audio === bgm) bgmFadeFrameId = null;
+    if (onComplete) onComplete();
+  }
+
+  const frameId = requestAnimationFrame(step);
+  if (audio === bgm) bgmFadeFrameId = frameId;
+}
+
+function fadeInBgm() {
+  if (bgm.paused) {
+    bgm.play().catch(() => {});
+  }
+  fadeAudio(bgm, BGM_VOLUME, 1200);
+}
+
+function fadeOutBgm() {
+  if (bgm.paused) return;
+  fadeAudio(bgm, 0, 900, () => {
+    bgm.pause();
+    bgm.currentTime = 0;
+  });
+}
+
+function syncBgmWithState() {
+  if (["teamSelect", "walkout", "stadiumIntro", "penalty"].includes(gameState)) {
+    fadeInBgm();
+    return;
+  }
+
+  fadeOutBgm();
+}
+
+function playGoalSfx() {
+  goalSfx.currentTime = 0;
+  goalSfx.play().catch(() => {});
+}
+
+function playCountdownSfx() {
+  countdownSfx.currentTime = 0;
+  countdownSfx.play().catch(() => {});
+}
+
+function setWalkoutIntroText() {
+  walkoutCountdown.innerHTML = "<span>Penalty shootout</span><span>starts soon</span>";
+}
 
 function resetKickFrameAnimation() {
   if (kickFrameTimer) {
@@ -385,6 +482,22 @@ function setState(nextState) {
   walkoutScreen.classList.toggle("hidden", nextState !== "walkout" && nextState !== "stadiumIntro");
   resultScreen.classList.toggle("hidden", nextState !== "result");
   syncFlashbulbs();
+  syncBgmWithState();
+}
+
+function loadSavedGestureHintPosition() {
+  let saved = {};
+  try {
+    saved = JSON.parse(localStorage.getItem(GESTURE_HINT_STORAGE_KEY) || "{}");
+  } catch (error) {
+    saved = {};
+  }
+
+  gestureHintVars.forEach((propertyName) => {
+    if (!saved[propertyName]) return;
+    const unit = propertyName === "--gesture-arrow-rotate" ? "deg" : "px";
+    root.style.setProperty(propertyName, `${saved[propertyName]}${unit}`);
+  });
 }
 
 function sortedTeams() {
@@ -504,7 +617,15 @@ function clamp(value, min, max) {
 }
 
 function aimCurvePoints() {
-  const end = { x: shotAim.x * 100, y: shotAim.y * 100 };
+  const sceneRect = goalScene.getBoundingClientRect();
+  const frameRect = goalFrame.getBoundingClientRect();
+  const end = sceneRect.width && sceneRect.height
+    ? {
+        x: ((frameRect.left - sceneRect.left + shotAim.x * frameRect.width) / sceneRect.width) * 100,
+        y: ((frameRect.top - sceneRect.top + shotAim.y * frameRect.height) / sceneRect.height) * 100,
+      }
+    : { x: shotAim.x * 100, y: shotAim.y * 100 };
+
   return {
     start: { x: 58, y: 88 },
     control: {
@@ -680,12 +801,12 @@ function renderAll() {
 
 let danmakuLaneIndex = 0;
 
-function addDanmaku(text, type = "normal") {
+function addDanmaku(text, type = "normal", immediate = false) {
   const item = document.createElement("div");
   item.className = `danmaku ${type}`;
   item.textContent = text;
   item.style.top = `${(danmakuLaneIndex % 5) * 38}px`;
-  item.style.animationDelay = `${Math.floor(danmakuLaneIndex / 5) * 2.2}s`;
+  item.style.animationDelay = immediate ? "0s" : `${Math.floor(danmakuLaneIndex / 5) * 2.2}s`;
   danmakuLaneIndex += 1;
   danmakuLayer.appendChild(item);
   item.addEventListener("animationend", () => item.remove());
@@ -698,24 +819,54 @@ function showResult(text, isGoal) {
   window.requestAnimationFrame(() => resultBurst.classList.add("show"));
 }
 
+function clearWalkoutTimers() {
+  walkoutTimers.forEach((timer) => clearTimeout(timer));
+  walkoutTimers = [];
+}
+
+function queueWalkoutStep(delay, callback) {
+  const timer = setTimeout(callback, delay);
+  walkoutTimers.push(timer);
+}
+
 function startWalkout() {
   const team = activeTeam();
+  clearWalkoutTimers();
   shotCount = 0;
   roundGoals = 0;
   roundFanPower = 0;
   shotAim = { x: 0.5, y: 0.3 };
   setState("walkout");
   renderActiveTeam();
+  setWalkoutIntroText();
+  walkoutCountdown.classList.remove("hide");
 
-  setTimeout(() => {
+  queueWalkoutStep(1200, () => {
+    walkoutCountdown.textContent = "3";
+    playCountdownSfx();
+  });
+
+  queueWalkoutStep(2050, () => {
+    walkoutCountdown.textContent = "2";
+  });
+
+  queueWalkoutStep(2900, () => {
+    walkoutCountdown.textContent = "1";
+  });
+
+  queueWalkoutStep(3650, () => {
+    walkoutCountdown.classList.add("hide");
+  });
+
+  queueWalkoutStep(4050, () => {
     setState("stadiumIntro");
-  }, 1550);
+  });
 
-  setTimeout(() => {
+  queueWalkoutStep(6250, () => {
     setState("penalty");
     preparePenaltyRound();
     addDanmaku("Penalty starts: 5 shots this round. Move your palm to aim, make a fist to shoot.");
-  }, 3350);
+  });
 }
 function stopKeeperMovement() {
   if (keeperFrameId) cancelAnimationFrame(keeperFrameId);
@@ -741,6 +892,34 @@ function createWallPlayers() {
   const count = wallCounts[clamp(shotCount, 0, wallCounts.length - 1)];
   const shuffledWallImages = [...wallImages].sort(() => Math.random() - 0.5);
   const imageQueue = Array.from({ length: count }, (_, index) => shuffledWallImages[index % shuffledWallImages.length]);
+  const sixPlayerFormations = [
+    [0.18, 0.27, 0.38, 0.62, 0.73, 0.82],
+    [0.14, 0.25, 0.35, 0.55, 0.67, 0.8],
+    [0.2, 0.33, 0.45, 0.6, 0.71, 0.86],
+  ];
+
+  if (count === 6) {
+    const baseFormation = sixPlayerFormations[(shotCount - 3 + Math.floor(Math.random() * 2)) % sixPlayerFormations.length];
+    wallPlayers = baseFormation.map((baseX, index) => ({
+      x: clamp(baseX + (Math.random() - 0.5) * 0.018, 0.12, 0.88),
+      reach: 0.04,
+      image: imageQueue[index],
+    }));
+    wallLine.innerHTML = wallPlayers
+      .map(
+        (player) => `
+        <div
+          class="wall-player"
+          style="left:${player.x * 100}%; z-index:1;"
+        >
+          <img src="${player.image}" alt="" draggable="false" />
+        </div>
+      `,
+      )
+      .join("");
+    return;
+  }
+
   const leftCount = Math.ceil(count / 2);
   const rightCount = count - leftCount;
   const gapByCount = {
@@ -797,6 +976,8 @@ function preparePenaltyRound() {
   resetKickFrameAnimation();
   shooting = false;
   shootButton.disabled = false;
+  fistReady = true;
+  fistFrameCount = 0;
   keeperX = 0.16 + Math.random() * 0.68;
   keeperDirection = Math.random() > 0.5 ? 1 : -1;
   createWallPlayers();
@@ -804,8 +985,8 @@ function preparePenaltyRound() {
   moveKeeper();
   startShotTimer();
   syncGestureCoach();
-  if (shotCount === 4) addDanmaku("Final shot. Make it count.", "goal");
-  gestureStatus.textContent = "Aim with your palm, mouse, or touch. Fist or button to shoot.";
+  if (shotCount === 4) addDanmaku("Final shot. Make it count.", "goal", true);
+  gestureStatus.textContent = "Open palm: move aim. Make a fist to shoot.";
 }
 
 function resetShot() {
@@ -890,13 +1071,14 @@ function shoot(source = "manual") {
       goalStreak += 1;
       roundGoals += 1;
       roundFanPower += fanPowerGain;
+      playGoalSfx();
       showResult(`GOAL +${fanPowerGain}`, true);
-      addDanmaku(source === "gesture" ? `Shot ${shotCount}: GOAL +2 Gesture Bonus.` : `Shot ${shotCount}: GOAL +1.`, "goal");
+      addDanmaku(shotResultMessages.GOAL, "goal");
     } else {
       goalStreak = 0;
       const failText = wallHit ? "BLOCKED" : offTarget ? "MISS" : "SAVED";
       showResult(failText, false);
-      addDanmaku(`Shot ${shotCount}: ${failText}.`, "saved");
+      addDanmaku(shotResultMessages[failText], "saved");
     }
 
     advanceAfterShot(team);
@@ -917,21 +1099,36 @@ function isFist(hand) {
   const palmSize = Math.max(landmarkDistance(wrist, palm), 0.05);
   const foldedFingers = [8, 12, 16, 20].filter((tipIndex) => {
     const tip = hand[tipIndex];
-    return landmarkDistance(tip, palm) < palmSize * 1.55 || tip.y > hand[tipIndex - 2].y;
+    const pip = hand[tipIndex - 2];
+    const mcp = hand[tipIndex - 3];
+    const tipToPalm = landmarkDistance(tip, palm);
+    const mcpToPalm = landmarkDistance(mcp, palm);
+    const tipBelowMiddleJoint = tip.y > pip.y + palmSize * 0.08;
+    const tipBelowBaseJoint = tip.y > mcp.y - palmSize * 0.03;
+    const tuckedNearPalm = tipToPalm < Math.max(palmSize * 1.22, mcpToPalm * 1.12);
+    return tipBelowMiddleJoint && tipBelowBaseJoint && tuckedNearPalm;
   }).length;
   return foldedFingers >= 3;
 }
 
 function handleGestureAim(x, y, fistClosed) {
+  const now = performance.now();
   updateAim(1 - x, y);
+
   if (!fistClosed) {
+    fistFrameCount = 0;
     fistReady = true;
-    gestureStatus.textContent = "Aim with your palm, mouse, or touch. Fist or button to shoot.";
+    gestureStatus.textContent = "Open palm: move aim. Make a fist to shoot.";
     return;
   }
-  gestureStatus.textContent = "Fist detected. Shooting.";
-  if (fistReady && !shooting && gameState === "penalty") {
+
+  fistFrameCount += 1;
+  const fistStable = fistFrameCount >= 3;
+  gestureStatus.textContent = fistStable ? "Fist detected. Shooting." : "Fist detected.";
+
+  if (fistReady && fistStable && now - lastGestureShotAt > 900 && !shooting && gameState === "penalty") {
     fistReady = false;
+    lastGestureShotAt = now;
     shoot("gesture");
   }
 }
@@ -956,7 +1153,7 @@ async function loadHandModel() {
       minTrackingConfidence: 0.5,
     });
     usingModel = true;
-    gestureStatus.textContent = "Gesture control is ready. Fist or button to shoot.";
+    gestureStatus.textContent = "Gesture control is ready. Open palm to aim, fist to shoot.";
     return handLandmarker;
   } catch (error) {
     usingModel = false;
@@ -1025,7 +1222,7 @@ function trackMotion() {
   previousFrame = frame;
 
   if (total < 260000) {
-    gestureStatus.textContent = "Aim with your palm. Use the button to shoot.";
+    gestureStatus.textContent = "Open palm: move aim. Make a fist to shoot.";
     fistReady = true;
     return;
   }
@@ -1033,7 +1230,7 @@ function trackMotion() {
   const x = sumX / total / motionCanvas.width;
   const y = sumY / total / motionCanvas.height;
   updateAim(x, y);
-  gestureStatus.textContent = "Aim with your palm. Use the button to shoot.";
+  gestureStatus.textContent = "Open palm: move aim. Make a fist to shoot.";
 }
 
 async function enableCamera() {
@@ -1049,7 +1246,7 @@ async function enableCamera() {
     cameraFeed.srcObject = cameraStream;
     cameraView.classList.add("has-video");
     cameraButton.textContent = "ON";
-    gestureStatus.textContent = "Camera is on. Preparing fist detection.";
+    gestureStatus.textContent = "Camera is on. Open palm to aim, fist to shoot.";
 
     const model = await loadHandModel();
     if (model) {
@@ -1111,19 +1308,20 @@ teamGrid.addEventListener("click", (event) => {
 
 goalScene.addEventListener("pointermove", (event) => {
   if (gameState !== "penalty" || shooting) return;
-  const rect = goalScene.getBoundingClientRect();
+  const rect = goalFrame.getBoundingClientRect();
   updateAim((event.clientX - rect.left) / rect.width, (event.clientY - rect.top) / rect.height);
 });
 
 goalScene.addEventListener("click", (event) => {
   if (gameState !== "penalty" || shooting) return;
   if (isTouchDevice) {
-    const rect = goalScene.getBoundingClientRect();
+    const rect = goalFrame.getBoundingClientRect();
     updateAim(
       (event.clientX - rect.left) / rect.width,
       (event.clientY - rect.top) / rect.height,
     );
   }
+  if (cameraStream) return;
   shoot();
 });
 
@@ -1147,6 +1345,8 @@ window.addEventListener("keydown", (event) => {
     shoot();
   }
 });
+window.addEventListener("resize", renderAim);
 
+loadSavedGestureHintPosition();
 renderAll();
 setState("start");

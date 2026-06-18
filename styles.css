@@ -10,6 +10,14 @@
   --soccer-image: url("./image/soccer/%E8%B6%B3%E7%90%833.svg");
   --figure-stand-front: url("./image/figure/%E5%88%9D%E5%A7%8B%E4%BA%BA%E7%89%A9/%E4%BA%BA%E8%AE%BE%E5%9B%BE_%E7%AB%99%E7%AB%8B%E6%AD%A3%E9%9D%A2.png");
   --figure-stand-back: url("./image/figure/%E5%88%9D%E5%A7%8B%E4%BA%BA%E7%89%A9/%E4%BA%BA%E8%AE%BE%E5%9B%BE_%E7%AB%99%E7%AB%8B%E8%83%8C%E5%BD%B1.png");
+  --gesture-coach-left: 420px;
+  --gesture-coach-top: 136px;
+  --gesture-coach-width: 282px;
+  --gesture-arrow-left: -172px;
+  --gesture-arrow-top: 20px;
+  --gesture-arrow-width: 156px;
+  --gesture-arrow-height: 96px;
+  --gesture-arrow-rotate: -2deg;
 }
 
 * {
@@ -328,14 +336,14 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(14px, 1.6vw, 24px);
-  width: min(560px, 52vw);
+  gap: clamp(9px, 1.1vw, 16px);
+  width: min(373px, 34.7vw);
   min-height: auto;
   aspect-ratio: 1080 / 296;
   margin: clamp(-22px, -1.4vw, -10px) 0 0 clamp(-24px, -1.8vw, -10px);
   padding: 0 8%;
   color: #20251e;
-  font-size: clamp(23px, 2.7vw, 44px);
+  font-size: clamp(15px, 1.8vw, 29px);
   font-style: italic;
   text-transform: uppercase;
   white-space: nowrap;
@@ -355,8 +363,8 @@ button {
 
 .start-button-ball {
   flex: 0 0 auto;
-  width: clamp(44px, 4.3vw, 72px);
-  height: clamp(44px, 4.3vw, 72px);
+  width: clamp(29px, 2.9vw, 48px);
+  height: clamp(29px, 2.9vw, 48px);
   object-fit: contain;
 }
 
@@ -1066,7 +1074,7 @@ button {
 
 .walkout-screen {
   display: grid;
-  place-items: end center;
+  place-items: center;
   pointer-events: none;
 }
 
@@ -1081,7 +1089,7 @@ button {
 }
 
 .walkout-copy {
-  display: flex;
+  display: none;
   align-items: center;
   gap: 14px;
   margin-bottom: 10vh;
@@ -1094,6 +1102,28 @@ button {
   background: rgba(10, 33, 27, 0.76);
   box-shadow: 0 22px 52px rgba(0, 0, 0, 0.26);
   backdrop-filter: blur(12px);
+}
+
+.walkout-countdown {
+  max-width: min(1360px, 96vw);
+  color: #fff8c9;
+  font-size: clamp(44px, 6.1vw, 102px);
+  font-weight: 950;
+  line-height: 1.02;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 0 6px 0 rgba(24, 91, 43, 0.6), 0 20px 40px rgba(0, 0, 0, 0.42);
+  transition: opacity 260ms ease, transform 260ms ease;
+}
+
+.walkout-countdown span {
+  display: block;
+  white-space: nowrap;
+}
+
+.walkout-countdown.hide {
+  opacity: 0;
+  transform: translateY(-14px) scale(0.96);
 }
 
 .is-stadiumIntro .stadium-bg {
@@ -1202,12 +1232,12 @@ button {
 
 .gesture-coach {
   position: absolute;
-  left: 300px;
-  top: 110px;
+  left: var(--gesture-coach-left);
+  top: var(--gesture-coach-top);
   z-index: 8;
   display: none;
   gap: 2px;
-  min-width: 210px;
+  width: var(--gesture-coach-width);
   padding: 10px 14px;
   border: 2px solid rgba(255, 255, 255, 0.82);
   border-radius: 8px;
@@ -1225,17 +1255,18 @@ button {
 
 .gesture-coach span {
   font-size: 13px;
+  line-height: 1.25;
 }
 
 .gesture-coach-arrow {
   position: absolute;
-  left: -112px;
-  top: 0;
-  width: 104px;
-  height: 64px;
+  left: var(--gesture-arrow-left);
+  top: var(--gesture-arrow-top);
+  width: var(--gesture-arrow-width);
+  height: var(--gesture-arrow-height);
   background: url("./image/other/arrow.png") center / contain no-repeat;
   filter: drop-shadow(0 0 10px rgba(255, 221, 46, 0.85));
-  transform: rotate(-12deg);
+  transform: rotate(var(--gesture-arrow-rotate));
   transform-origin: right center;
 }
 
@@ -1504,7 +1535,7 @@ button {
 .keeper {
   position: absolute;
   left: 50%;
-  bottom: 0;
+  bottom: -24px;
   z-index: 4;
   width: clamp(48px, 6.8vw, 70px);
   height: clamp(72px, 10.2vw, 105px);
@@ -1526,7 +1557,7 @@ button {
 
 .keeper.save-leftTop,
 .keeper.save-rightTop {
-  bottom: 0;
+  bottom: -24px;
 }
 
 .keeper.save-leftTop {
@@ -1543,7 +1574,7 @@ button {
 }
 
 .keeper.save-centerTop {
-  bottom: 0;
+  bottom: -24px;
   transform: translateX(-50%) translateY(-19px);
 }
 
@@ -1554,7 +1585,7 @@ button {
 
 .keeper.save-leftLow,
 .keeper.save-rightLow {
-  bottom: 0;
+  bottom: -24px;
 }
 
 .keeper.save-leftLow {
@@ -1687,7 +1718,7 @@ button {
 }
 
 .striker-frame.is-kick-frame {
-  transform: translate(-4px, 15px) scale(1.14);
+  transform: translate(-4px, -20px) scale(1.14);
   transform-origin: center bottom;
 }
 
@@ -1993,9 +2024,9 @@ button {
   }
 
   .start-button-art {
-    width: min(460px, 94vw);
+    width: min(307px, 63vw);
     margin: -8px 0 0 -6px;
-    font-size: clamp(20px, 6vw, 30px);
+    font-size: clamp(13px, 4vw, 20px);
   }
 
   .start-button-art .start-button-ball,
@@ -2192,7 +2223,7 @@ button {
   }
 
   .striker-frame.is-kick-frame {
-    transform: translate(-2px, 8px) scale(1.1);
+    transform: translate(-2px, -16px) scale(1.1);
   }
 
   .ball {
@@ -2306,8 +2337,8 @@ button {
   }
 
   .start-button-art {
-    width: min(280px, 60vw);
-    font-size: clamp(14px, 3.5vw, 20px);
+    width: min(187px, 40vw);
+    font-size: clamp(9px, 2.4vw, 13px);
     margin: -4px 0 0 -4px;
   }
 
@@ -2380,6 +2411,7 @@ button {
   }
 
   .player-art-card {
+    grid-template-rows: repeat(2, minmax(0, 1fr));
     gap: 4px;
     min-height: 0;
     flex: 1;
@@ -2520,5 +2552,182 @@ button {
 
   .score {
     font-size: 16px;
+  }
+}
+
+@media (max-height: 500px) and (min-width: 900px) {
+  .screen-layer {
+    padding: 8px 10px;
+  }
+
+  .team-shell {
+    width: min(1170px, calc(100vw - 20px));
+  }
+
+  .team-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 34vw);
+    gap: 10px;
+  }
+
+  .select-panel,
+  .select-board {
+    padding: 12px;
+  }
+
+  .select-board {
+    display: grid;
+  }
+
+  .player-art-card {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .player-art-card img {
+    object-fit: contain;
+    object-position: center bottom;
+  }
+
+  .leaderboard {
+    display: block;
+    top: 8px;
+    right: 8px;
+    width: min(260px, 27vw);
+    padding: 8px;
+  }
+
+  .leaderboard .panel-title {
+    margin-bottom: 6px;
+    font-size: 12px;
+  }
+
+  .leaderboard-list {
+    gap: 5px;
+  }
+
+  .leaderboard-item {
+    grid-template-columns: 24px minmax(0, 1fr) auto;
+    min-height: 37px;
+    padding: 5px 7px;
+    gap: 6px;
+  }
+
+  .leaderboard-item:nth-child(n + 6) {
+    display: none;
+  }
+
+  .leaderboard .rank {
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+  }
+
+  .leaderboard .flag-img.mini {
+    width: 18px;
+    height: 18px;
+    margin-right: 4px;
+  }
+
+  .leaderboard .leader-team strong {
+    font-size: 11px;
+  }
+
+  .leaderboard .leader-team small {
+    font-size: 9px;
+  }
+
+  .leaderboard .score {
+    font-size: 16px;
+  }
+
+  .hud-score {
+    max-width: calc(100vw - min(280px, 29vw) - 28px);
+  }
+
+  .goal-scene {
+    top: 50%;
+    height: min(340px, calc(100svh - 88px));
+  }
+
+  .is-walkout .goal-frame,
+  .is-stadiumIntro .goal-frame,
+  .is-penalty .goal-frame {
+    top: 28px;
+  }
+
+  .result-screen {
+    padding: 6px 10px;
+  }
+
+  .result-shell {
+    width: min(1040px, calc(100vw - 20px));
+    min-height: calc(100svh - 12px);
+    padding: 0;
+  }
+
+  .result-head {
+    min-height: calc(100svh - 12px);
+    padding: 8px 14px 54px;
+  }
+
+  .result-banner {
+    top: -82px;
+    width: min(680px, 64vw);
+  }
+
+  .result-banner-copy {
+    min-height: 124px;
+    padding-top: 46px;
+    transform: translateY(-14px);
+  }
+
+  .result-head h2 {
+    font-size: clamp(36px, 5vw, 62px);
+  }
+
+  .result-thanks {
+    font-size: clamp(13px, 2vw, 20px);
+    transform: translateY(-28px) perspective(620px) rotateX(-7deg) scaleX(0.96);
+  }
+
+  .result-stats {
+    margin-top: 0;
+    gap: 14px;
+    transform: translateY(-34px);
+  }
+
+  .result-stats strong {
+    font-size: clamp(48px, 6vw, 74px);
+  }
+
+  .result-stats span {
+    font-size: clamp(12px, 1.6vw, 18px);
+  }
+
+  .result-stats div:not(.result-stat-divider) {
+    min-width: 116px;
+  }
+
+  .result-stat-divider {
+    height: 54px;
+  }
+
+  .result-celebrator {
+    left: clamp(10px, 8vw, 96px);
+    bottom: 46px;
+    width: clamp(120px, 16vw, 180px);
+  }
+
+  .result-actions {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    bottom: 6px;
+    width: min(690px, 74vw);
+    gap: 8px;
+  }
+
+  .result-button {
+    min-height: 40px;
+    font-size: 13px;
   }
 }
