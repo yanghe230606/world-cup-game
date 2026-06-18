@@ -855,8 +855,11 @@ function addDanmaku(text, type = "normal", immediate = false) {
   const item = document.createElement("div");
   item.className = `danmaku ${type}`;
   item.textContent = text;
-  item.style.top = `${(danmakuLaneIndex % 5) * 38}px`;
-  item.style.animationDelay = immediate ? "0s" : `${Math.floor(danmakuLaneIndex / 5) * 2.2}s`;
+  // Landscape short viewports (≤500px): 80px layer fits only 2 lanes at 38px
+  const compact = window.innerHeight < 500;
+  const laneCount = compact ? 2 : 5;
+  item.style.top = `${(danmakuLaneIndex % laneCount) * 38}px`;
+  item.style.animationDelay = immediate ? "0s" : `${Math.floor(danmakuLaneIndex / laneCount) * 2.2}s`;
   danmakuLaneIndex += 1;
   danmakuLayer.appendChild(item);
   item.addEventListener("animationend", () => item.remove());
