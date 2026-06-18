@@ -1,12 +1,12 @@
 const teamNames = [
   "Mexico",
   "South Africa",
-  "South Korea",
-  "Czech Republic",
+  "Korea Republic",
+  "Czechia",
   "Canada",
   "Switzerland",
   "Qatar",
-  "Bosnia Herzegovina",
+  "Bosnia and Herzegovina",
   "Brazil",
   "Morocco",
   "Haiti",
@@ -14,10 +14,10 @@ const teamNames = [
   "United States",
   "Paraguay",
   "Australia",
-  "Turkey",
+  "T\u00fcrkiye",
   "Germany",
-  "Curacao",
-  "Ivory Coast",
+  "Cura\u00e7ao",
+  "C\u00f4te d'Ivoire",
   "Ecuador",
   "Netherlands",
   "Japan",
@@ -25,10 +25,10 @@ const teamNames = [
   "Tunisia",
   "Belgium",
   "Egypt",
-  "Iran",
+  "IR Iran",
   "New Zealand",
   "Spain",
-  "Cape Verde",
+  "Cabo Verde",
   "Saudi Arabia",
   "Uruguay",
   "France",
@@ -40,7 +40,58 @@ const teamNames = [
   "Austria",
   "Jordan",
   "Portugal",
-  "DR Congo",
+  "Congo DR",
+  "Uzbekistan",
+  "Colombia",
+  "England",
+  "Croatia",
+  "Ghana",
+  "Panama",
+];
+
+const teamFlagFileNames = [
+  "Mexico",
+  "South_Africa",
+  "South_Korea",
+  "Czech_Republic",
+  "Canada",
+  "Switzerland",
+  "Qatar",
+  "Bosnia_Herzegovina",
+  "Brazil",
+  "Morocco",
+  "Haiti",
+  "Scotland",
+  "United_States",
+  "Paraguay",
+  "Australia",
+  "Turkey",
+  "Germany",
+  "Curacao",
+  "Ivory_Coast",
+  "Ecuador",
+  "Netherlands",
+  "Japan",
+  "Sweden",
+  "Tunisia",
+  "Belgium",
+  "Egypt",
+  "Iran",
+  "New_Zealand",
+  "Spain",
+  "Cape_Verde",
+  "Saudi_Arabia",
+  "Uruguay",
+  "France",
+  "Senegal",
+  "Norway",
+  "Iraq",
+  "Argentina",
+  "Algeria",
+  "Austria",
+  "Jordan",
+  "Portugal",
+  "DR_Congo",
   "Uzbekistan",
   "Colombia",
   "England",
@@ -101,62 +152,61 @@ const teamThemes = [
 ];
 
 const teamEmojis = [
-  "🇲🇽",
-  "🇿🇦",
-  "🇰🇷",
-  "🇨🇿",
-  "🇨🇦",
-  "🇨🇭",
-  "🇶🇦",
-  "🇧🇦",
-  "🇧🇷",
-  "🇲🇦",
-  "🇭🇹",
-  "🏴",
-  "🇺🇸",
-  "🇵🇾",
-  "🇦🇺",
-  "🇹🇷",
-  "🇩🇪",
-  "🇨🇼",
-  "🇨🇮",
-  "🇪🇨",
-  "🇳🇱",
-  "🇯🇵",
-  "🇸🇪",
-  "🇹🇳",
-  "🇧🇪",
-  "🇪🇬",
-  "🇮🇷",
-  "🇳🇿",
-  "🇪🇸",
-  "🇨🇻",
-  "🇸🇦",
-  "🇺🇾",
-  "🇫🇷",
-  "🇸🇳",
-  "🇳🇴",
-  "🇮🇶",
-  "🇦🇷",
-  "🇩🇿",
-  "🇦🇹",
-  "🇯🇴",
-  "🇵🇹",
-  "🇨🇩",
-  "🇺🇿",
-  "🇨🇴",
-  "🏴",
-  "🇭🇷",
-  "🇬🇭",
-  "🇵🇦",
+  "馃嚥馃嚱",
+  "馃嚳馃嚘",
+  "馃嚢馃嚪",
+  "馃嚚馃嚳",
+  "馃嚚馃嚘",
+  "馃嚚馃嚟",
+  "馃嚩馃嚘",
+  "馃嚙馃嚘",
+  "馃嚙馃嚪",
+  "馃嚥馃嚘",
+  "馃嚟馃嚬",
+  "馃彺",
+  "馃嚭馃嚫",
+  "馃嚨馃嚲",
+  "馃嚘馃嚭",
+  "馃嚬馃嚪",
+  "馃嚛馃嚜",
+  "馃嚚馃嚰",
+  "馃嚚馃嚠",
+  "馃嚜馃嚚",
+  "馃嚦馃嚤",
+  "馃嚡馃嚨",
+  "馃嚫馃嚜",
+  "馃嚬馃嚦",
+  "馃嚙馃嚜",
+  "馃嚜馃嚞",
+  "馃嚠馃嚪",
+  "馃嚦馃嚳",
+  "馃嚜馃嚫",
+  "馃嚚馃嚮",
+  "馃嚫馃嚘",
+  "馃嚭馃嚲",
+  "馃嚝馃嚪",
+  "馃嚫馃嚦",
+  "馃嚦馃嚧",
+  "馃嚠馃嚩",
+  "馃嚘馃嚪",
+  "馃嚛馃嚳",
+  "馃嚘馃嚬",
+  "馃嚡馃嚧",
+  "馃嚨馃嚬",
+  "馃嚚馃嚛",
+  "馃嚭馃嚳",
+  "馃嚚馃嚧",
+  "馃彺",
+  "馃嚟馃嚪",
+  "馃嚞馃嚟",
+  "馃嚨馃嚘",
 ];
 
 const teams = teamNames.map((name, index) => {
   const number = String(index + 1).padStart(2, "0");
-  const fileName = name.replaceAll(" ", "_");
+  const fileName = teamFlagFileNames[index];
   const id = fileName.toLowerCase().replaceAll("_", "-");
   const [primary, secondary] = teamThemes[index];
-  const seed = 48 - index;
 
   return {
     id,
@@ -166,9 +216,9 @@ const teams = teamNames.map((name, index) => {
     chant: `${name.toUpperCase().split(" ")[0]}!`,
     primary,
     secondary,
-    support: 68 + ((seed * 13) % 74),
-    votes: 24 + ((seed * 7) % 58),
-    goals: 1 + ((seed * 5) % 10),
+    support: 0,
+    votes: 0,
+    goals: 0,
     previousRank: index + 1,
   };
 });
@@ -277,14 +327,14 @@ const MEDIAPIPE_BUNDLE = `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@$
 const MEDIAPIPE_WASM = `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${MEDIAPIPE_VERSION}/wasm`;
 const HAND_MODEL = "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task";
 const keeperFrames = {
-  block: "./image/figure/守门员/正面封堵式.png",
-  sideDive: "./image/figure/守门员/单侧扑救式.png",
-  highCatch: "./image/figure/守门员/起跳高接式.png",
+  block: "./image/figure/%E5%AE%88%E9%97%A8%E5%91%98/%E6%AD%A3%E9%9D%A2%E5%B0%81%E5%A0%B5%E5%BC%8F.png",
+  sideDive: "./image/figure/%E5%AE%88%E9%97%A8%E5%91%98/%E5%8D%95%E4%BE%A7%E6%89%91%E6%95%91%E5%BC%8F.png",
+  highCatch: "./image/figure/%E5%AE%88%E9%97%A8%E5%91%98/%E8%B5%B7%E8%B7%B3%E9%AB%98%E6%8E%A5%E5%BC%8F.png",
 };
 const wallImages = [
-  "./image/figure/人墙/人墙1.png",
-  "./image/figure/人墙/人墙2.png",
-  "./image/figure/人墙/人墙3.png",
+  "./image/figure/%E4%BA%BA%E5%A2%99/%E4%BA%BA%E5%A2%991.png",
+  "./image/figure/%E4%BA%BA%E5%A2%99/%E4%BA%BA%E5%A2%992.png",
+  "./image/figure/%E4%BA%BA%E5%A2%99/%E4%BA%BA%E5%A2%993.png",
 ];
 const keeperZoneActions = {
   leftTop: { image: keeperFrames.sideDive, className: "save-leftTop" },
@@ -531,14 +581,14 @@ function leaderboardItems(limit = teams.length, compact = false) {
     .map((team, index) => {
       const rank = index + 1;
       const delta = team.previousRank - rank;
-      const deltaText = delta > 0 ? `↑${delta}` : delta < 0 ? `↓${Math.abs(delta)}` : "—";
+      const deltaText = delta > 0 ? `Up ${delta}` : delta < 0 ? `Down ${Math.abs(delta)}` : "-";
 
       return `
         <li class="leaderboard-item ${team.id === activeTeamId ? "active" : ""}">
           <span class="rank">${rank}</span>
           <span class="leader-team">
             <strong>${flagMarkup(team, "flag-img mini")} ${team.name}</strong>
-            <small>${compact ? `Goals ${team.goals} · ${deltaText}` : `Votes ${team.votes} · Goals ${team.goals} · ${deltaText}`}</small>
+            <small>${compact ? `Goals ${team.goals} - ${deltaText}` : `Shots ${team.votes} - Goals ${team.goals} - ${deltaText}`}</small>
           </span>
           <span class="score">${team.support}</span>
         </li>
@@ -562,7 +612,7 @@ function renderPodium() {
           <span class="podium-medal">${rank}</span>
           ${flagMarkup(team, "flag-img podium-flag")}
           <strong>${team.name}</strong>
-          <small>${label} · Goals ${team.goals}</small>
+          <small>${label} - Goals ${team.goals}</small>
           <em>${team.support}</em>
           <div class="podium-step"></div>
         </article>
@@ -579,14 +629,14 @@ function renderLeaderboard() {
     .map((team, index) => {
       const rank = index + 4;
       const delta = team.previousRank - rank;
-      const deltaText = delta > 0 ? `↑${delta}` : delta < 0 ? `↓${Math.abs(delta)}` : "—";
+      const deltaText = delta > 0 ? `Up ${delta}` : delta < 0 ? `Down ${Math.abs(delta)}` : "-";
 
       return `
         <li class="leaderboard-item ${team.id === activeTeamId ? "active" : ""}">
           <span class="rank">${rank}</span>
           <span class="leader-team">
             <strong>${flagMarkup(team, "flag-img mini")} ${team.name}</strong>
-            <small>Goals ${team.goals} · ${deltaText}</small>
+            <small>Goals ${team.goals} - ${deltaText}</small>
           </span>
           <span class="score">${team.support}</span>
         </li>
@@ -878,9 +928,9 @@ function moveKeeper() {
   const lateRoundPressure = shotCount >= 3 ? (shotCount - 2) * 0.0028 : 0;
   const speed = 0.0076 + shotCount * 0.0013 + lateRoundPressure;
   keeperX += speed * keeperDirection;
-  if (keeperX > 0.9 || keeperX < 0.1) {
+  if (keeperX > 0.8 || keeperX < 0.2) {
     keeperDirection *= -1;
-    keeperX = clamp(keeperX, 0.1, 0.9);
+    keeperX = clamp(keeperX, 0.2, 0.8);
   }
   keeper.style.left = `${keeperX * 100}%`;
   keeper.style.transform = "translateX(-50%)";
@@ -978,7 +1028,7 @@ function preparePenaltyRound() {
   shootButton.disabled = false;
   fistReady = true;
   fistFrameCount = 0;
-  keeperX = 0.16 + Math.random() * 0.68;
+  keeperX = 0.24 + Math.random() * 0.52;
   keeperDirection = Math.random() > 0.5 ? 1 : -1;
   createWallPlayers();
   updateAim(shotAim.x, shotAim.y);
@@ -1064,6 +1114,7 @@ function shoot(source = "manual") {
 
   setTimeout(() => {
     shotCount += 1;
+    team.votes += 1;
     if (isGoal) {
       const fanPowerGain = source === "gesture" ? 2 : 1;
       team.support += fanPowerGain;

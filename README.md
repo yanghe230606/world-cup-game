@@ -54,3 +54,4 @@ This project can be published directly with GitHub Pages:
 - The game uses local image assets under `image/`.
 - Camera gesture detection loads MediaPipe files from public CDN URLs when enabled.
 - Keep filenames and folders unchanged unless you also update their references in `index.html`, `styles.css`, and `app.js`.
+- Asset source and attribution notes are documented in `CREDITS.md`.

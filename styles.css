@@ -2431,18 +2431,22 @@ button {
     min-height: calc(100svh - 16px);
     padding: 8px 12px;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .result-banner {
-    top: -28px;
+    top: -80px;
     width: 44vw;
   }
 
   .result-banner-copy {
-    width: min(360px, 46vw);
-    min-height: 62px;
-    padding-top: 20px;
-    transform: translateY(-6px);
+    width: min(260px, 34vw);
+    min-height: 210px;
+    padding-top: 70px;
+    align-items: flex-start;
+    transform: none;
   }
 
   .result-head h2 {
@@ -2451,13 +2455,14 @@ button {
 
   .result-thanks {
     font-size: clamp(10px, 1.4vw, 13px);
-    transform: translateY(-4px) perspective(620px) rotateX(-7deg) scaleX(0.96);
+    transform: none;
+    margin-top: 2px;
   }
 
   .result-stats {
-    margin-top: 0;
+    margin-top: auto;
     gap: 6px;
-    transform: translateY(-8px);
+    transform: none;
   }
 
   .result-stats strong {
@@ -2477,10 +2482,15 @@ button {
   }
 
   .result-actions {
+    position: static;
+    left: auto;
+    bottom: auto;
+    transform: none;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    bottom: 4px;
     gap: 5px;
     width: min(560px, 96vw);
+    margin-top: 6px;
+    margin-bottom: 6px;
   }
 
   .result-button {
@@ -2671,6 +2681,7 @@ button {
   .result-head {
     min-height: calc(100svh - 12px);
     padding: 8px 14px 54px;
+    display: block;
   }
 
   .result-banner {
@@ -2679,8 +2690,10 @@ button {
   }
 
   .result-banner-copy {
+    width: min(860px, 80vw);
     min-height: 124px;
     padding-top: 46px;
+    align-items: center;
     transform: translateY(-14px);
   }
 
@@ -2721,11 +2734,20 @@ button {
     width: clamp(120px, 16vw, 180px);
   }
 
+  .result-stats {
+    margin-top: 0;
+  }
+
   .result-actions {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    position: absolute;
+    left: 50%;
     bottom: 6px;
+    transform: translateX(-50%);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     width: min(690px, 74vw);
     gap: 8px;
+    margin-top: 0;
+    margin-bottom: 0;
   }
 
   .result-button {
