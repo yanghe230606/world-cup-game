@@ -2236,15 +2236,6 @@ button {
   .keeper {
     width: 48px;
     height: 72px;
-    bottom: 4px;
-  }
-
-  .keeper.save-leftTop,
-  .keeper.save-rightTop,
-  .keeper.save-centerTop,
-  .keeper.save-leftLow,
-  .keeper.save-rightLow {
-    bottom: 4px;
   }
 
   .aim-reticle {
@@ -2270,8 +2261,8 @@ button {
   }
 
   .wall-player {
-    width: 40px;
-    height: 58px;
+    width: 56px;
+    height: 82px;
   }
 
   .control-dock {
@@ -2443,45 +2434,46 @@ button {
   }
 
   .result-banner {
-    top: -50px;
-    width: 55vw;
+    top: -28px;
+    width: 44vw;
   }
 
   .result-banner-copy {
-    min-height: 80px;
-    padding-top: 30px;
-    transform: translateY(-16px);
+    width: min(360px, 46vw);
+    min-height: 62px;
+    padding-top: 20px;
+    transform: translateY(-6px);
   }
 
   .result-head h2 {
-    font-size: clamp(26px, 4.5vw, 42px);
+    font-size: clamp(16px, 2.2vw, 26px);
   }
 
   .result-thanks {
-    font-size: clamp(12px, 2vw, 18px);
-    transform: translateY(-18px) perspective(620px) rotateX(-7deg) scaleX(0.96);
+    font-size: clamp(10px, 1.4vw, 13px);
+    transform: translateY(-4px) perspective(620px) rotateX(-7deg) scaleX(0.96);
   }
 
   .result-stats {
-    margin-top: 2px;
+    margin-top: 0;
     gap: 6px;
-    transform: translateY(-22px);
+    transform: translateY(-8px);
   }
 
   .result-stats strong {
-    font-size: clamp(34px, 5.5vw, 52px);
+    font-size: clamp(26px, 3.6vw, 44px);
   }
 
   .result-stats span {
-    font-size: clamp(13px, 2vw, 20px);
+    font-size: clamp(11px, 1.4vw, 14px);
   }
 
   .result-stats div:not(.result-stat-divider) {
-    min-width: 70px;
+    min-width: 60px;
   }
 
   .result-stat-divider {
-    height: 36px;
+    height: 32px;
   }
 
   .result-actions {
