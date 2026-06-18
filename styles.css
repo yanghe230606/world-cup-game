@@ -2770,6 +2770,87 @@ button {
   }
 }
 
+/* Mobile landscape result: keep the desktop composition, only scale it down. */
+@media (max-height: 500px) and (min-width: 900px) {
+  .result-screen {
+    padding: 0 10px;
+  }
+
+  .result-shell {
+    width: min(1120px, calc(100vw - 20px));
+    min-height: 100svh;
+  }
+
+  .result-head {
+    min-height: 100svh;
+    padding: 0 14px 66px;
+    overflow: hidden;
+  }
+
+  .result-banner {
+    top: -118px;
+    width: min(1040px, 88vw);
+  }
+
+  .result-banner-copy {
+    width: min(920px, 80vw);
+    min-height: 214px;
+    padding-top: 82px;
+    transform: translateY(-14px);
+  }
+
+  #resultTitle {
+    font-size: clamp(52px, 7.4vw, 86px) !important;
+  }
+
+  .result-head h2 {
+    font-size: clamp(52px, 7.4vw, 86px);
+  }
+
+  .result-thanks {
+    font-size: clamp(18px, 2.2vw, 26px);
+    transform: translateY(-48px) perspective(620px) rotateX(-7deg) scaleX(0.96);
+  }
+
+  .result-stats {
+    gap: clamp(16px, 3vw, 34px);
+    transform: translateY(-62px);
+  }
+
+  .result-stats strong {
+    font-size: clamp(42px, 5.6vw, 68px);
+  }
+
+  .result-stats span {
+    font-size: clamp(17px, 2.2vw, 26px);
+  }
+
+  .result-stats div:not(.result-stat-divider) {
+    min-width: clamp(116px, 19vw, 240px);
+  }
+
+  .result-stat-divider {
+    height: clamp(56px, 8vh, 76px);
+  }
+
+  .result-celebrator {
+    left: calc(50% - min(430px, 35vw));
+    bottom: clamp(116px, 23vh, 162px);
+    width: clamp(170px, 18vw, 242px);
+  }
+
+  .result-actions {
+    bottom: 14px;
+    width: min(780px, 78vw);
+    gap: 12px;
+  }
+
+  .result-button {
+    min-height: clamp(42px, 8.6vh, 56px);
+    font-size: clamp(14px, 2vw, 22px);
+  }
+}
+
 /* Portrait orientation: ask user to rotate */
 .rotate-prompt {
   display: none;

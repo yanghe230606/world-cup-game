@@ -1103,8 +1103,7 @@ function shoot(source = "manual") {
   const keeperReach = 0.13 + shotCount * 0.012 + (shotCount >= 3 ? 0.045 + (shotCount - 3) * 0.025 : 0);
   const wallCanBlock = shotAim.y > 0.38;
   const wallHit = wallCanBlock && wallPlayers.some((wallPlayer) => Math.abs(targetX - wallPlayer.x) < wallPlayer.reach);
-  const lateRoundMargin = shotCount >= 3 ? 0.04 + (shotCount - 3) * 0.02 : 0;
-  const offTarget = shotAim.y > 0.58 - lateRoundMargin || targetX < 0.1 + lateRoundMargin || targetX > 0.9 - lateRoundMargin;
+  const offTarget = shotAim.x < 0 || shotAim.x > 1 || shotAim.y < 0 || shotAim.y > 1;
   const isGoal = !offTarget && !wallHit && keeperDistance > keeperReach;
   striker.classList.add("kick");
   playKickFrameAnimation();
